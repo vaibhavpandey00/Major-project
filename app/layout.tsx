@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+
+const poppins = Poppins({
+  weight: [ "300", "400", "500", "600", "700", "800", "900" ],
+  subsets: [ "latin" ],
+  variable: "--font-poppins",
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: [ "latin" ],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  subsets: [ "latin" ],
 });
 
 export const metadata: Metadata = {
@@ -25,9 +32,29 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
       >
         {children}
+        <Toaster
+          toastOptions={{
+            unstyled: true,
+            style: {
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '8px',
+              gap: '8px',
+              padding: '16px',
+              color: '#A14CDA',
+            },
+            classNames: {
+              error: 'bg-red-400',
+              success: 'bg-green-600',
+              warning: 'bg-yellow-600',
+              info: 'bg-blue-600',
+            },
+          }}
+        />
       </body>
     </html>
   );
