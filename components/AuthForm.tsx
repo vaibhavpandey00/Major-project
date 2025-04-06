@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useActionState, useState } from 'react'
 import Form from 'next/form'
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -15,52 +15,34 @@ const AuthForm = ({ type }: { type: string }) => {
         password: ""
     })
 
-    // const user = {
-    //     id: 1,
-    //     name: "John Doe",
-    //     username: "johndoe",
-    //     email: "4xv8a@example.com",
-    //     password: "password"
-    // }
-
-    // if (user && user.name && user.id) {
-    //     console.log("User logged in");
-
-    //     return redirect("/dashboard");
-    // };
-
     const handleChange = (e: any) => {
         setFormData({ ...formData, [ e.target.name ]: e.target.value });
     }
 
-    const handleSubmit = async () => {
-
+    const handleAuth = async () => {
+        let res;
         if (type === "signin") {
-            const res = await signIn(formData);
-            if (res?.success) {
-                toast.success(res.message);
-                return redirect("/dashboard");
+            res = await signIn(formData);
+            if (res.success) {
+                toast.success("Login successful");
+                redirect("/dashboard");
             }
-            else {
-                toast.error(res.error);
+            toast.error(res.error);
+        } else {
+            res = await signUp(formData);
+            if (res.success) {
+                toast.success("Sign up successful");
+                redirect("/sign-in");
             }
+            toast.error("Sign up failed");
         }
-        else {
-            const res = await signUp(formData);
-            if (res?.success) {
-                toast.success(res.message);
-                setTimeout(() => {
-                    return redirect("/sign-in");
-                }, 1000);
-            }
-            else {
-                toast.error(res.error);
-            }
-        }
-    }
+        return res;
+    };
+
+    const [ state, action ] = useActionState(handleAuth, undefined);
 
     return <>
-        <Form action={handleSubmit} className="flex flex-col justify-center w-1/4 p-4 gap-6 rounded-2xl border" >
+        <Form action={action} className="flex flex-col justify-center w-1/4 p-4 gap-6 rounded-2xl border" >
             <h2 className="text-3xl border-b">{type === "signin" ? "Sign In" : "Sign Up"}</h2>
             {type === "signup" &&
                 <input type="text" name="name" onChange={handleChange} placeholder="Name" className="outline-none text-xl" />}

@@ -1,9 +1,11 @@
 "use client";
 
 import About from "@/components/About";
+import Contact from "@/components/Contact";
 import Services from "@/components/Services";
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 import Image from "next/image";
+import { useEffect } from "react";
 
 const people = [
   {
@@ -37,6 +39,10 @@ const people = [
 ];
 export default function Home() {
 
+  useEffect(() => {
+    
+  }, [])
+
   return <>
     <div className="flex justify-center items-center w-full h-screen">
       {/* 1st half */}
@@ -69,5 +75,6 @@ export default function Home() {
 
     <About />
     <Services />
+    <Contact />
   </>
 }
